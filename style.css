@@ -1,0 +1,1017 @@
+/* ==========================================================================
+   Real-Time Weather Dashboard - Stylesheet (CSS3)
+   Clean, modern, responsive styling with CSS variables & responsive layout
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CSS Custom Properties & Design Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Color Palette - Modern Atmospheric Slate & Ocean */
+  --bg-primary: #0b1329;
+  --bg-gradient: linear-gradient(135deg, #090e1a 0%, #111c35 50%, #1a2b4c 100%);
+  --surface-card: rgba(22, 33, 62, 0.75);
+  --surface-card-hover: rgba(28, 43, 80, 0.85);
+  --surface-metric: rgba(15, 23, 42, 0.6);
+  --surface-input: rgba(15, 23, 42, 0.8);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-accent: rgba(56, 189, 248, 0.35);
+
+  /* Typography Colors */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --text-highlight: #38bdf8;
+
+  /* Accent Colors */
+  --accent-cyan: #38bdf8;
+  --accent-blue: #3b82f6;
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
+  --accent-purple: #a855f7;
+
+  /* Shadows & Glows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.45);
+  --glow-cyan: 0 0 20px rgba(56, 189, 248, 0.25);
+
+  /* Layout & Geometry */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --max-width: 1200px;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Theme Variables (Toggled via [data-theme="light"]) */
+[data-theme="light"] {
+  --bg-primary: #f0f4f8;
+  --bg-gradient: linear-gradient(135deg, #e2e8f0 0%, #edf2f7 50%, #e0e7ff 100%);
+  --surface-card: rgba(255, 255, 255, 0.85);
+  --surface-card-hover: rgba(255, 255, 255, 0.95);
+  --surface-metric: rgba(241, 245, 249, 0.9);
+  --surface-input: #ffffff;
+  --border-color: rgba(203, 213, 225, 0.8);
+  --border-accent: rgba(2, 132, 199, 0.4);
+
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-subtle: #64748b;
+  --text-highlight: #0284c7;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 20px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 32px rgba(15, 23, 42, 0.12);
+  --glow-cyan: 0 0 20px rgba(2, 132, 199, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & Base Typography
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-primary);
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Application Container
+   -------------------------------------------------------------------------- */
+.app-wrapper {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Header & Global Toolbar
+   -------------------------------------------------------------------------- */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--glow-cyan);
+  color: #ffffff;
+}
+
+.brand-icon-wrapper svg {
+  width: 24px;
+  height: 24px;
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Unit Toggle (°C / °F) */
+.unit-toggle {
+  display: inline-flex;
+  background: var(--surface-metric);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  gap: 2px;
+}
+
+.unit-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.unit-btn:hover {
+  color: var(--text-main);
+}
+
+.unit-btn.active {
+  background: var(--accent-cyan);
+  color: #0b1329;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--surface-metric);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.theme-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Search & Location Bar
+   -------------------------------------------------------------------------- */
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+}
+
+.search-form:focus-within {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan), var(--shadow-md);
+}
+
+.search-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-subtle);
+  padding-left: 6px;
+}
+
+.search-icon-wrapper svg {
+  width: 20px;
+  height: 20px;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: var(--text-main);
+  padding: 8px 6px;
+  min-width: 140px;
+}
+
+.search-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.search-submit-btn {
+  background: var(--accent-cyan);
+  color: #0b1329;
+}
+
+.search-submit-btn:hover {
+  background: #7dd3fc;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+}
+
+.location-btn {
+  background: var(--surface-metric);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 14px;
+}
+
+.location-btn:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.location-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Quick City Filter Pills */
+.quick-cities {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-label {
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+
+.city-pill {
+  background: var(--surface-metric);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.city-pill:hover {
+  color: var(--text-main);
+  border-color: var(--accent-cyan);
+  background: var(--surface-card-hover);
+}
+
+.city-pill.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   6. Loading & Error Feedback States
+   -------------------------------------------------------------------------- */
+.state-box {
+  background: var(--surface-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  padding: 40px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.state-box.hidden {
+  display: none !important;
+}
+
+/* Spinner */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(56, 189, 248, 0.2);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.state-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.state-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 440px;
+}
+
+/* Error State */
+.error-box {
+  border-color: rgba(244, 63, 94, 0.4);
+  background: rgba(244, 63, 94, 0.08);
+}
+
+.error-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(244, 63, 94, 0.15);
+  color: var(--accent-rose);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.retry-btn {
+  background: var(--accent-rose);
+  color: #ffffff;
+  margin-top: 6px;
+}
+
+.retry-btn:hover {
+  background: #fb7185;
+}
+
+/* --------------------------------------------------------------------------
+   7. Weather Dashboard Layout (Grid)
+   -------------------------------------------------------------------------- */
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-grid.hidden {
+  display: none !important;
+}
+
+/* Top Section: Hero Card + Key Metrics */
+.weather-overview-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Current Weather Hero Card
+   -------------------------------------------------------------------------- */
+.hero-card {
+  background: var(--surface-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.location-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.location-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.location-country {
+  font-size: 0.95rem;
+  color: var(--text-highlight);
+  font-weight: 600;
+}
+
+.location-datetime {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.condition-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-metric);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.hero-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.temperature-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-temp {
+  font-size: 4.8rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text-main);
+}
+
+.temp-unit {
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--text-highlight);
+  vertical-align: super;
+}
+
+.weather-condition-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 6px;
+}
+
+.weather-visual-icon {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+  animation: float 4s ease-in-out infinite;
+}
+
+.weather-visual-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+}
+
+.hero-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.hero-stat-pill strong {
+  color: var(--text-main);
+}
+
+/* --------------------------------------------------------------------------
+   9. Weather Details Grid (Metric Cards)
+   -------------------------------------------------------------------------- */
+.metrics-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.metric-card {
+  background: var(--surface-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-metric);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.metric-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.metric-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.metric-subtext {
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 6px;
+  background: var(--surface-metric);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+  transition: width 0.6s ease;
+}
+
+/* --------------------------------------------------------------------------
+   10. Hourly Forecast Carousel / Track
+   -------------------------------------------------------------------------- */
+.section-panel {
+  background: var(--surface-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title svg {
+  width: 20px;
+  height: 20px;
+  color: var(--accent-cyan);
+}
+
+.hourly-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Scrollbar for hourly track */
+.hourly-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hourly-track::-webkit-scrollbar-track {
+  background: var(--surface-metric);
+  border-radius: var(--radius-full);
+}
+
+.hourly-track::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.hourly-track::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
+}
+
+.hourly-item {
+  min-width: 86px;
+  background: var(--surface-metric);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: var(--transition-fast);
+}
+
+.hourly-item:hover {
+  border-color: var(--border-accent);
+  background: var(--surface-card-hover);
+  transform: translateY(-2px);
+}
+
+.hourly-item.active-hour {
+  border-color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.hourly-time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.hourly-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--text-main);
+}
+
+.hourly-temp {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.hourly-pop {
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   11. 7-Day Forecast Grid
+   -------------------------------------------------------------------------- */
+.daily-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.daily-row {
+  display: grid;
+  grid-template-columns: 130px 40px 1fr 140px;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface-metric);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  transition: var(--transition-fast);
+}
+
+.daily-row:hover {
+  background: var(--surface-card-hover);
+  border-color: var(--border-accent);
+}
+
+.daily-day-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.daily-day-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.daily-date {
+  font-size: 0.78rem;
+  color: var(--text-subtle);
+}
+
+.daily-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.daily-condition-label {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.daily-temps {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.temp-min {
+  font-size: 0.95rem;
+  color: var(--text-subtle);
+  font-weight: 600;
+}
+
+.temp-bar-container {
+  width: 70px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.temp-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-amber));
+}
+
+.temp-max {
+  font-size: 1rem;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   12. Footer
+   -------------------------------------------------------------------------- */
+.app-footer {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+  padding: 20px 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.app-footer a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   13. Responsive Breakpoints (Mobile & Tablet)
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .weather-overview-row {
+    grid-template-columns: 1fr;
+  }
+
+  .main-temp {
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-wrapper {
+    padding: 16px 12px 36px;
+    gap: 18px;
+  }
+
+  .header-bar {
+    justify-content: space-between;
+  }
+
+  .search-form {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+    order: 1;
+  }
+
+  .search-icon-wrapper {
+    order: 0;
+  }
+
+  .search-submit-btn {
+    flex: 1;
+    order: 2;
+  }
+
+  .location-btn {
+    order: 3;
+  }
+
+  .metrics-container {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card {
+    padding: 20px;
+  }
+
+  .main-temp {
+    font-size: 3.4rem;
+  }
+
+  .temp-unit {
+    font-size: 1.6rem;
+  }
+
+  .weather-visual-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .daily-row {
+    grid-template-columns: 90px 32px 1fr 90px;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .temp-bar-container {
+    display: none;
+  }
+}

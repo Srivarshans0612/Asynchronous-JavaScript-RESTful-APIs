@@ -1,0 +1,10 @@
+{
+  "name": "Real-Time Weather Dashboard",
+  "description": "Professional real-time weather dashboard fetching live weather data using HTML5, CSS3, and Vanilla JavaScript.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
